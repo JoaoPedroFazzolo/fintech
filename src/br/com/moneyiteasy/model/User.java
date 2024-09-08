@@ -1,30 +1,36 @@
 package br.com.moneyiteasy.model;
-
 import java.util.Scanner;
 import java.util.UUID;
+
 
 public class User {
     private String id;
     private String name;
     private String email;
     private String cpf;
-    private String password;
+    private String userName;
+    private String password;;
 
-    public User() {
+    public User(String name, String email, String cpf, String userName, String hashed) {
         this.id = UUID.randomUUID().toString();
     }
 
-    public User(String id, String name, String email, String cpf, String password ) {
-        this();
+    public User(String id, String name, String email, String cpf, String userName, String password) {
+        this(name, email, cpf, userName, password);
         this.name = name;
         setEmail(email);
         setCpf(cpf);
         setPassword(password);
+        setUserName(userName);
         this.password = password;
     }
 
     public String getId() {
         return id;
+    }
+
+    public void setUserName(String username) {
+        this.userName = username;
     }
 
     public void setId(String id) {
@@ -66,11 +72,11 @@ public class User {
         return password;
     }
 
-    // Validação de Senha com Exp Regulares - Requisitos: 1 letra maiúscula, 1 caracter especial e no min 8 dígitos.
     public void setPassword(String password) {
         if (password == null || password.length() < 8 || !password.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[\\W_]).{8,}")) {
-            throw new IllegalArgumentException("Senha inválida!");
-        } this.password = password;
+            throw new IllegalArgumentException("Senha inválida! A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula e um caractere especial.");
+        }
+        this.password = password;
     }
 
     public void createUser(Scanner scanner) {
@@ -94,6 +100,11 @@ public class User {
         System.out.printf("Nome: %s | E-mail: %s | CPF: %s%n", name, email, cpf);
     }
     public String getUsername() {
-        return name;
+        return userName;
     }
+
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
+    }
+
 }
